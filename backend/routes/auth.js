@@ -1,6 +1,7 @@
 const auth = require("express").Router();
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 auth.post("/register",async (req,res)=>{
     try{
      const userExist = await  User.findOne({userName:req.body.userName});
@@ -24,7 +25,27 @@ auth.post("/register",async (req,res)=>{
     }
 });
 
-auth.post("/login",(req,res)=>{
+auth.post("/login",async (req,res)=>{
+   const currentUser = await User.findOne({userName:req.body.userName});   
+   if(!currentUser){return res.status(401).json("userName or password is wrong");}
+   
+   if(await bcrypt.compare(req.body.password,currentUser.password)){
+       const signner = jwt.sign({
+            userID :currentUser._id,
+            userName:currentUser.userName,
+            email :currentUser.email
+        },process.env.TOKEN);
+
+        res.json(signner);
+
+   }
+   else{
+      
+       return res.status(401).json("userName or password is wrong");
+   }
+
+   
+
 
 });
 

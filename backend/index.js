@@ -1,5 +1,6 @@
 const express = require("express");
 const authRouter = require("./routes/auth");
+const userRouter = require("./routes/users");
 const mongoose = require("mongoose");
 const app = express();
 const bodyParser = require("body-parser");
@@ -7,6 +8,7 @@ const bodyParser = require("body-parser");
 
 app.use(bodyParser.json());
 app.use("/api/auth",authRouter);
+app.use("/api/user",userRouter);
 
 
 
