@@ -18,6 +18,18 @@ services:
       - ./env/backend.env
     depends_on:
       - mongodb
+  frontend:
+      build: "./frontend"
+      ports:
+        - 8500:8500
+      volumes:
+        - ./frontend/src/:/app/src
+      env_file:
+        - ./env/frontend.env
+      depends_on:
+        - mongodb
+        - backend
+
     
 volumes:
   data:
